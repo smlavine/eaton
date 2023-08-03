@@ -1,6 +1,7 @@
 # [eaton](https://sr.ht/~smlavine/eaton)
 
-A servicable macro processor in ~200 lines of [Hare](https://harelang.org).
+A pretty decent macro processor in less than 300 lines of
+[Hare](https://harelang.org).
 
 ## Example usage
 
