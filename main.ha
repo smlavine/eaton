@@ -1,5 +1,6 @@
-// Reads text from stdin, and prints it to stdout, except that any text
-// enclosed between delimiters is first evaluated for macros.
+// eaton:main.ha (https://sr.ht/~smlavine/eaton)
+// Copyright (C) 2023 Sebastian LaVine <mail@smlavine.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 use bytes;
 use io;

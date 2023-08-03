@@ -1,3 +1,7 @@
+// eaton:macro/lower.ha (https://sr.ht/~smlavine/eaton)
+// Copyright (C) 2023 Sebastian LaVine <mail@smlavine.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // A simple macro that converts all uppercase characters within the macro to
 // lowercase.
 // Useful for debugging and development.

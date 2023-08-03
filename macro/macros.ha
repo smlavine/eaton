@@ -1,3 +1,7 @@
+// eaton:macro/macros.ha (https://sr.ht/~smlavine/eaton)
+// Copyright (C) 2023 Sebastian LaVine <mail@smlavine.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 use fmt;
 use io;
 use regex;

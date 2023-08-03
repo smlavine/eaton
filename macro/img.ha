@@ -1,3 +1,7 @@
+// eaton:macro/img.ha (https://sr.ht/~smlavine/eaton)
+// Copyright (C) 2023 Sebastian LaVine <mail@smlavine.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // Converts the provided src and alt-text into an <img> that is surrounded by
 // a clickable link to itself (HTML).
 
