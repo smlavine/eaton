@@ -13,24 +13,19 @@ use macro;
 // See hare patch on commit 72429c9.
 type _writer = fn(h: io::handle, buf: const []u8) (size | io::error);
 
-// Delimiters around macro sections.
-type delimiter = struct {
-	text: []u8,
-	next: size,  // Index of corresponding delimiter in delims array
-	writer: *_writer,
+// Quotes around macro sections.
+type quote = struct {
+	text: []u8,  // Text representing the quote
+	writer: *_writer, // Text before the quote should be written here
 };
 
-// I would have preferred to use a simpler circular linked list approach
-// instead of an indexed array; see <https://todo.sr.ht/~sircmpwn/hare/862>.
-const delims: [_]delimiter = [
-	delimiter {
+const quotes: [2]quote = [
+	quote {
 		text = ['`', '`'],
-		next = 1,
 		writer = &io::write,
 	},
-	delimiter {
+	quote {
 		text = ['\'', '\''],
-		next = 0,
 		writer = &macro::process,
 	},
 ];
@@ -39,9 +34,10 @@ export fn main() void = {
 	let in: []u8 = io::drain(os::stdin)!;
 	defer free(in);
 
-	for (let d = delims[0], buf = in; len(buf) > 0; d = delims[d.next]) {
-		let (before, after) = bytes::cut(buf, d.text);
-		d.writer(os::stdout, before)!;
+	// `q ^= 1` alternates between 0 and 1
+	for (let q = 0z, buf = in; len(buf) > 0; q ^= 1) {
+		let (before, after) = bytes::cut(buf, quotes[q].text);
+		quotes[q].writer(os::stdout, before)!;
 		buf = after;
 	};
 };
