@@ -1,9 +1,10 @@
-// eaton:macro/macros.ha (https://sr.ht/~smlavine/eaton)
+// eaton:macro/macro.ha (https://sr.ht/~smlavine/eaton)
 // Copyright (C) 2023 Sebastian LaVine <mail@smlavine.com>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use fmt;
 use io;
+use log;
 use regex;
 use strings::{dup, fromutf8, toutf8};
 use strio;
@@ -37,14 +38,13 @@ export fn process(h: io::handle, buf: const []u8) (size | io::error) = {
 
 	for (let i = 0z; i < len(macros)) {
 		const result = regex::find(&macros[i].regex, fromutf8(buf)!);
-		//fmt::println("i =", i, "len(result) =", len(result))!;
-
 		if (len(result) == 0) {
 			i += 1;
 			continue;
 		};
-
 		defer regex::result_free(result);
+
+		log::println("found macro", macros[i].description);
 
 		// From the beginning of the buffer to the start of the regex
 		// match is regular text that should not be processed.
