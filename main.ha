@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use bytes;
+use getopt;
 use io;
+use log;
 use os;
 
 use macro;
@@ -30,7 +32,7 @@ const quotes: [2]quote = [
 	},
 ];
 
-export fn main() void = {
+fn run() void = {
 	let in: []u8 = io::drain(os::stdin)!;
 	defer free(in);
 
@@ -40,4 +42,26 @@ export fn main() void = {
 		quotes[q].writer(os::stdout, before)!;
 		buf = after;
 	};
+};
+
+// Can be enabled with -l option.
+@init fn disable_logger() void = {
+	log::setlogger(log::silent);
+};
+
+export fn main() void = {
+	const cmd = getopt::parse(os::args,
+		"A pretty decent macro processor",
+		('l', "Enable debug logging to stderr"),
+	);
+	defer getopt::finish(&cmd);
+
+	for (let i = 0z; i < len(cmd.opts); i += 1) {
+		switch (cmd.opts[i].0) {
+		case 'l' =>
+			log::setlogger(log::default);
+		};
+	};
+
+	run();
 };
