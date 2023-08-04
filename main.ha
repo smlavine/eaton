@@ -26,6 +26,8 @@ type quote = struct {
 // The data required to begin a run of the program.
 type config = struct {
 	quotes: [2]quote,
+	in: io::handle,
+	out: io::handle,
 	line_by_line: bool,
 };
 
@@ -35,7 +37,7 @@ fn quote_buffer(buf: []u8, c: *config) (io::error | void) = {
 	// `q ^= 1` alternates between 0 and 1
 	for (let q = 0z; len(buf) > 0; q ^= 1) {
 		let (before, after) = bytes::cut(buf, c.quotes[q].text);
-		c.quotes[q].writer(os::stdout, before)?;
+		c.quotes[q].writer(c.out, before)?;
 		buf = after;
 	};
 };
@@ -44,18 +46,18 @@ fn run(c: *config) (io::error | void) = {
 	switch (c.line_by_line) {
 	case true =>
 		for (true) {
-			match (bufio::scanline(os::stdin)?) {
+			match (bufio::scanline(c.in)?) {
 			case let sl: []u8 =>
 				defer free(sl);
 				append(sl, '\n'); // scanline ignores newline
 				quote_buffer(sl, c)?;
-				bufio::flush(os::stdout)?;
+				bufio::flush(c.out)?;
 			case io::EOF =>
 				break;
 			};
 		};
 	case false =>
-		let buf: []u8 = io::drain(os::stdin)?;
+		let buf: []u8 = io::drain(c.in)?;
 		defer free(buf);
 		quote_buffer(buf, c)?;
 	};
@@ -84,6 +86,8 @@ export fn main() void = {
 				writer = &macro::process,
 			},
 		],
+		in = os::stdin,
+		out = os::stdout,
 		...
 	};
 
