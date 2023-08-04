@@ -3,7 +3,10 @@
 eaton: main.ha macro/*.ha
 	hare build
 
+check:
+	hare test
+
 clean:
 	rm eaton
 
-.PHONY: clean
+.PHONY: check clean
