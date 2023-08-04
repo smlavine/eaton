@@ -5,6 +5,7 @@
 // Converts the provided src and alt-text into an <img> that is surrounded by
 // a clickable link to itself (HTML).
 
+use fmt;
 use io;
 use regex::{compile};
 use strings::{toutf8};
@@ -21,12 +22,9 @@ def IMG_RE = `img!\([[:space:]]*"(.*)"[[:space:]]*,[[:space:]]*"(.*)"[[:space:]]
 
 export fn img(h: io::handle, args: []str) (size | io::error) = {
 	assert(len(args) == 2);
-
-	return io::write(h, toutf8(`<a href="`))?
-		+ io::write(h, toutf8(args[0]))?
-		+ io::write(h, toutf8(`"><img src="`))?
-		+ io::write(h, toutf8(args[0]))?
-		+ io::write(h, toutf8(`" alt="`))?
-		+ io::write(h, toutf8(args[1]))?
-		+ io::write(h, toutf8(`"></a>`))?;
+	return fmt::fprintf(
+		h,
+		`a href="{0}"><img src="{0}" alt="{1}"></a>`, 
+		args[0], args[1],
+	);
 };
