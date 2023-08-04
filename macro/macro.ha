@@ -69,9 +69,6 @@ export fn process(h: io::handle, buf: const []u8) (size | io::error) = {
 			static append(macro_args, dup(strio::string(&a)));
 		};
 
-		assert(len(macro_args) == len(result) - 1,
-			"Some arguments got lost on the cutting room floor");
-
 		// Now we can finally process the macro we are currently
 		// working with.
 		written += macros[i].formatter(h, macro_args)?;
