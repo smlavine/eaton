@@ -23,6 +23,7 @@ type quote = struct {
 	writer: *_writer, // Text before the quote will be written here
 };
 
+// The data required to begin a run of the program.
 type config = struct {
 	quotes: [2]quote,
 	line_by_line: bool,
