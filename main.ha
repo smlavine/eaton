@@ -52,7 +52,7 @@ fn run() void = {
 export fn main() void = {
 	const cmd = getopt::parse(os::args,
 		"A pretty decent macro processor",
-		('l', "Enable debug logging to stderr"),
+		('l', "enable debug logging to stderr"),
 	);
 	defer getopt::finish(&cmd);
 
