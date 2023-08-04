@@ -41,11 +41,9 @@ fn quote_buffer(buf: []u8, c: *config) (io::error | void) = {
 };
 
 fn run(c: *config) (io::error | void) = {
-	log::printfln("c.line_by_line = {}", c.line_by_line);
 	switch (c.line_by_line) {
 	case true =>
 		for (true) {
-			log::println("in line by line loop");
 			match (bufio::scanline(os::stdin)?) {
 			case let sl: []u8 =>
 				defer free(sl);
