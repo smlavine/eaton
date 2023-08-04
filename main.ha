@@ -18,7 +18,7 @@ type _writer = fn(h: io::handle, buf: const []u8) (size | io::error);
 // Quotes around macro sections.
 type quote = struct {
 	text: []u8,  // Text representing the quote
-	writer: *_writer, // Text before the quote should be written here
+	writer: *_writer, // Text before the quote will be written here
 };
 
 const quotes: [2]quote = [
