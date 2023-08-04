@@ -61,12 +61,9 @@ fn run(c: *config) (io::error | void) = {
 	};
 };
 
-// Can be enabled with -z option.
-@init fn disable_logger() void = {
-	log::setlogger(log::silent);
-};
-
 export fn main() void = {
+	log::setlogger(log::silent); // re-enabled with -z option
+
 	const cmd = getopt::parse(os::args,
 		"reads text from stdin and processes it for macros",
 		('i', "quote text", "define custom start quote (default: ``)"),
