@@ -63,9 +63,14 @@ fn run(c: *config) (io::error | void) = {
 	};
 };
 
-export fn main() void = {
-	log::setlogger(log::silent); // re-enabled with -z option
+// Can be re-enabled with the -z option.
+@init fn disable_logger() void = {
+	if (os::getenv("EATON_LOG") is void) {
+		log::setlogger(log::silent);
+	};
+};
 
+export fn main() void = {
 	const cmd = getopt::parse(os::args,
 		"reads text from stdin and processes it for macros",
 		('i', "quote text", "define custom start quote (default: ``)"),
