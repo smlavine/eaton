@@ -14,7 +14,7 @@ def CONCAT_RE = `concat!\(([^)]*)\)`;
 
 @init fn append_macro() void = {
 	append(macros, macro {
-		description = `concat!(...)`,
+		info = (`concat!(...)`, "Removes all whitespace"),
 		regex = compile(CONCAT_RE)!,
 		formatter = &concat,
 	});

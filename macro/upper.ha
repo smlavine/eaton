@@ -15,7 +15,10 @@ def UPPER_RE = `upper!\(([^)]*)\)`;
 
 @init fn append_macro() void = {
 	append(macros, macro {
-		description = `upper!(...)`,
+		info = (
+			`upper!(...)`,
+			"Converts all lowercase characters to uppercase",
+		),
 		regex = compile(UPPER_RE)!,
 		formatter = &upper,
 	});

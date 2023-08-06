@@ -4,10 +4,12 @@
 
 use bufio;
 use bytes;
+use fmt;
 use getopt;
 use io;
 use log;
 use os;
+use sort;
 use strings::{toutf8};
 
 use macro;
@@ -63,6 +65,34 @@ fn run(c: *config) (io::error | void) = {
 	};
 };
 
+// Lists all macros present.
+fn macros() void = {
+	let synopsis_mods = fmt::modifiers {
+		padding = fmt::padding::ALIGN_LEFT,
+		width = 0, // To be updated to length of longest element
+		...
+	};
+
+	let alphabetized_info: []*macro::macro = [];
+
+	for (let i = 0z; i < len(macro::macros); i += 1) {
+		let n = sort::rbisect(
+			alphabetized_info: []void,
+			size(*macro::macro),
+			&macro::macros[i]: *void,
+			&macro::compare,
+		);
+		insert(alphabetized_info[n], &macro::macros[i]);
+	};
+
+	for (let i = 0z; i < len(alphabetized_info); i += 1) {
+		let (synopsis, description) = alphabetized_info[i].info;
+		// TODO: format so that synopises are left aligned, see
+		// synopsis_mods
+		fmt::printfln("{} - {}", synopsis, description)!;
+	};
+};
+
 // Can be re-enabled with the -z option.
 @init fn disable_logger() void = {
 	if (os::getenv("EATON_LOG") is void) {
@@ -76,6 +106,7 @@ export fn main() void = {
 		('i', "quote text", "define custom start quote (default: ``)"),
 		('o', "quote text", "define custom end quote (default: '')"),
 		('l', "read stdin line-by-line instead of all at once"),
+		('m', "don't read input for macros; instead, list and describe all of th e macros present"),
 		('z', "enable debug logging to stderr"),
 	);
 	defer getopt::finish(&cmd);
@@ -104,6 +135,9 @@ export fn main() void = {
 			c.quotes[1].text = toutf8(cmd.opts[i].1);
 		case 'l' =>
 			c.line_by_line = true;
+		case 'm' =>
+			macros();
+			os::exit(os::status::SUCCESS);
 		case 'z' =>
 			log::setlogger(log::default);
 		};

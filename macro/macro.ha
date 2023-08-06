@@ -6,7 +6,7 @@ use fmt;
 use io;
 use log;
 use regex;
-use strings::{dup, fromutf8, toutf8};
+use strings;
 use strio;
 
 // Formats a slice of strings and writes the result to the provided handle.
@@ -14,7 +14,7 @@ export type formatter = fn(h: io::handle, args: []str) (size | io::error);
 
 // The information necessary to describe, identify, and expand a macro.
 export type macro = struct {
-	description: const str,
+	info: (const str, const str), // synopsis, longer description
 	regex: regex::regex,
 	formatter: *formatter,
 };
@@ -31,20 +31,27 @@ export let macros: []macro = [];
 	free(macros);
 };
 
+// Compares two macros alphabetically by their synopsis.
+export fn compare(a: const *void, b: const *void) int = {
+	return strings::compare((a: *macro).info.0, (b: *macro).info.0);
+};
+
 // Processes the provided text for macros, writing the processed text to the
 // provided handle.
 export fn process(h: io::handle, buf: const []u8) (size | io::error) = {
 	let written = 0z;
 
 	for (let i = 0z; i < len(macros)) {
-		const result = regex::find(&macros[i].regex, fromutf8(buf)!);
+		const result = regex::find(&macros[i].regex,
+			strings::fromutf8(buf)!,
+		);
 		if (len(result) == 0) {
 			i += 1;
 			continue;
 		};
 		defer regex::result_free(result);
 
-		log::println("found macro", macros[i].description);
+		log::println("found macro", macros[i].info.0);
 
 		// From the beginning of the buffer to the start of the regex
 		// match is regular text that should not be processed.
@@ -65,8 +72,10 @@ export fn process(h: io::handle, buf: const []u8) (size | io::error) = {
 		for (let i = 1z; i < len(result); i += 1) {
 			let a = strio::dynamic();
 			defer io::close(&a): void;
-			process(&a, toutf8(result[i].content))?;
-			static append(macro_args, dup(strio::string(&a)));
+			process(&a, strings::toutf8(result[i].content))?;
+			static append(macro_args,
+				strings::dup(strio::string(&a))
+			);
 		};
 
 		// Now we can finally process the macro we are currently
