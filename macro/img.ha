@@ -27,7 +27,7 @@ export fn img(h: io::handle, args: []str) (size | io::error) = {
 	assert(len(args) == 2);
 	return fmt::fprintf(
 		h,
-		`a href="{0}"><img src="{0}" alt="{1}"></a>`, 
+		`<a href="{0}"><img src="{0}" alt="{1}"></a>`,
 		args[0], args[1],
 	);
 };
