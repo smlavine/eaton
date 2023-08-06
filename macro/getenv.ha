@@ -10,7 +10,10 @@ use os::{tryenv};
 use regex::{compile};
 use strings::{toutf8};
 
-def GETENV_RE = `getenv!\([[:space:]]*([^),]*)(,[[:space:]]*"[^"]*")?[[:space:]]*\)`;
+// TODO: provided default value; doesn't work
+//def GETENV_RE = `getenv!\([[:space:]]*([^),]*)(,[[:space:]]*"[^"]*")?[[:space:]]*\)`;
+
+def GETENV_RE = `getenv!\([[:space:]]*([^)[:space:]]*)[[:space:]]*\)`;
 
 @init fn append_macro() void = {
 	append(macros, macro {
@@ -21,15 +24,8 @@ def GETENV_RE = `getenv!\([[:space:]]*([^),]*)(,[[:space:]]*"[^"]*")?[[:space:]]
 };
 
 export fn getenv(h: io::handle, args: []str) (size | io::error) = {
-	return switch (len(args)) {
-	case 1 =>
-		yield io::write(h, toutf8(tryenv(args[0], "")));
-	case 2 =>
-		// TODO: isolate intended argument from capture
-		// XXX: Not working presently
-		yield io::write(h, toutf8(tryenv(args[0], args[1])));
-	case =>
-		abort("Too many arguments to getenv!."
-			"This is likely programmer error.");
-	};
+	// TODO: default value, like in tryenv. Can variable amount of
+	// capture groups be used?
+	assert(len(args) == 1);
+	return io::write(h, toutf8(tryenv(args[0], "")));
 };
