@@ -5,9 +5,9 @@
 use fmt;
 use io;
 use log;
+use memio;
 use regex;
 use strings;
-use strio;
 
 // Formats a slice of strings and writes the result to the provided handle.
 export type formatter = fn(h: io::handle, args: []str) (size | io::error);
@@ -70,11 +70,11 @@ export fn process(h: io::handle, buf: const []u8) (size | io::error) = {
 		// evaluated first. Process them for macros before putting them
 		// in macro_args.
 		for (let i = 1z; i < len(result); i += 1) {
-			let a = strio::dynamic();
+			let a = memio::dynamic();
 			defer io::close(&a): void;
 			process(&a, strings::toutf8(result[i].content))?;
 			static append(macro_args,
-				strings::dup(strio::string(&a))
+				strings::dup(memio::string(&a)!)
 			);
 		};
 

@@ -6,9 +6,9 @@
 
 use ascii;
 use io;
+use memio;
 use regex::{compile};
 use strings;
-use strio;
 
 def CONCAT_RE = `concat!\(([^)]*)\)`;
 
@@ -38,32 +38,32 @@ export fn concat(h: io::handle, args: []str) (size | io::error) = {
 };
 
 @test fn concat_empty() void = {
-	let out = strio::dynamic();
+	let out = memio::dynamic();
 	defer io::close(&out): void;
 
 	concat(&out, [""])!;
-	let outstr = strio::string(&out);
+	let outstr = memio::string(&out)!;
 
 	assert(outstr == "");
 };
 
 @test fn concat_all_whitespace() void = {
-	let out = strio::dynamic();
+	let out = memio::dynamic();
 	defer io::close(&out): void;
 
 
 	concat(&out, ["\f\n\r\t\v "])!;
-	let outstr = strio::string(&out);
+	let outstr = memio::string(&out)!;
 
 	assert(outstr == "");
 };
 
 @test fn concat_normal() void = {
-	let out = strio::dynamic();
+	let out = memio::dynamic();
 	defer io::close(&out): void;
 
 	concat(&out, ["\tHello. My name is Bob. :)\n"])!;
-	let outstr = strio::string(&out);
+	let outstr = memio::string(&out)!;
 
 	assert(outstr == "Hello.MynameisBob.:)");
 };

@@ -2,11 +2,10 @@
 // Copyright (C) 2023 Sebastian LaVine <mail@smlavine.com>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use bufio;
 use io;
+use memio;
 use os;
 use strings;
-use strio;
 
 use macro;
 
@@ -26,13 +25,13 @@ let default_quotes: [2]quote = [
 	const input = "Hello, my name is Bob.";
 	const c = config {
 		quotes = default_quotes,
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == input);
 };
@@ -41,13 +40,13 @@ let default_quotes: [2]quote = [
 	const input = "Hello, my name is ``Bob!''";
 	const c = config {
 		quotes = default_quotes,
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Hello, my name is Bob!");
 };
@@ -56,13 +55,13 @@ let default_quotes: [2]quote = [
 	const input = "Text and ``''more text";
 	const c = config {
 		quotes = default_quotes,
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Text and more text");
 };
@@ -71,13 +70,13 @@ let default_quotes: [2]quote = [
 	const input = "Text and ''more text";
 	const c = config {
 		quotes = default_quotes,
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Text and ''more text");
 };
@@ -86,13 +85,13 @@ let default_quotes: [2]quote = [
 	const input = "Text and ``more text";
 	const c = config {
 		quotes = default_quotes,
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Text and more text");
 };
@@ -101,13 +100,13 @@ let default_quotes: [2]quote = [
 	const input = "Text and ````''more text";
 	const c = config {
 		quotes = default_quotes,
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Text and ``more text");
 };
@@ -116,13 +115,13 @@ let default_quotes: [2]quote = [
 	const input = "Text and `````''more text";
 	const c = config {
 		quotes = default_quotes,
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Text and ```more text");
 };
@@ -140,13 +139,13 @@ let default_quotes: [2]quote = [
 				writer = &macro::process,
 			},
 		],
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Text and more text");
 };
@@ -155,13 +154,13 @@ let default_quotes: [2]quote = [
 	const input = "Text and ``upper!(more text)''";
 	const c = config {
 		quotes = default_quotes,
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Text and MORE TEXT");
 };
@@ -179,13 +178,13 @@ let default_quotes: [2]quote = [
 				writer = &macro::process,
 			},
 		],
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr == "Text and more text");
 };
@@ -203,13 +202,13 @@ let default_quotes: [2]quote = [
 				writer = &macro::process,
 			},
 		],
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr ==  "Text and </quote>more text");
 };
@@ -227,13 +226,13 @@ let default_quotes: [2]quote = [
 				writer = &macro::process,
 			},
 		],
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr ==  "Text and more text");
 };
@@ -251,13 +250,13 @@ let default_quotes: [2]quote = [
 				writer = &macro::process,
 			},
 		],
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr ==  "Text and more text");
 };
@@ -275,13 +274,13 @@ let default_quotes: [2]quote = [
 				writer = &macro::process,
 			},
 		],
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr ==  "Text and MORE TEXT");
 };
@@ -299,13 +298,13 @@ let default_quotes: [2]quote = [
 				writer = &macro::process,
 			},
 		],
-		in = &bufio::fixed(strings::toutf8(input), io::mode::READ),
-		out = &strio::dynamic(),
+		in = &memio::fixed(strings::toutf8(input)),
+		out = &memio::dynamic(),
 		...
 	};
 	defer io::close(c.out): void;
 	run(&c)!;
-	let outstr = strio::string(c.out as *io::stream: *strio::stream);
+	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr ==  "Text and MORE TEXT");
 };
