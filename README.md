@@ -8,7 +8,10 @@ A pretty decent macro processor in less than 300 lines of
 ```shell-session
 $ make
 hare build
-$ echo "Hi there, ``upper!(everyone)''! | ./eaton
+$ cat input1.txt
+Hi there, ``upper!(everyone)''!
+$ ./eaton < input1.txt
+Hi there, EVERYONE!
 ```
 
 ## Installation
