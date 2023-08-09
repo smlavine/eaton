@@ -6,9 +6,10 @@
 // Otherwise is replaced with the empty string.
 
 use io;
-use os::{tryenv};
+use memio;
+use os;
 use regex::{compile};
-use strings::{toutf8};
+use strings;
 
 // TODO: provided default value; doesn't work
 //def GETENV_RE = `getenv!\([[:space:]]*([^),]*)(,[[:space:]]*"[^"]*")?[[:space:]]*\)`;
@@ -30,5 +31,29 @@ export fn getenv(h: io::handle, args: []str) (size | io::error) = {
 	// TODO: default value, like in tryenv. Can variable amount of
 	// capture groups be used?
 	assert(len(args) == 1);
-	return io::write(h, toutf8(tryenv(args[0], "")));
+	return io::write(h, strings::toutf8(os::tryenv(args[0], "")));
+};
+
+@test fn getenv() void = {
+	let out = memio::dynamic();
+	defer io::close(&out): void;
+
+	os::setenv("foo", "baz")!;
+
+	getenv(&out, ["foo"])!;
+	let outstr = memio::string(&out)!;
+
+	assert(outstr == "baz");
+};
+
+@test fn getenv_unset() void = {
+	let out = memio::dynamic();
+	defer io::close(&out): void;
+
+	os::unsetenv("foo")!;
+
+	getenv(&out, ["foo"])!;
+	let outstr = memio::string(&out)!;
+
+	assert(outstr == "");
 };

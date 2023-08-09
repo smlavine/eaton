@@ -7,8 +7,8 @@
 
 use fmt;
 use io;
+use memio;
 use regex::{compile};
-use strings::{toutf8};
 
 def IMG_RE = `img!\([[:space:]]*"(.*)"[[:space:]]*,[[:space:]]*"(.*)"[[:space:]]*\)`;
 
@@ -30,4 +30,14 @@ export fn img(h: io::handle, args: []str) (size | io::error) = {
 		`<a href="{0}"><img src="{0}" alt="{1}"></a>`,
 		args[0], args[1],
 	);
+};
+
+@test fn img() void = {
+	let out = memio::dynamic();
+	defer io::close(&out): void;
+
+	img(&out, ["/images/favicon.jpg", "A smiley face :)"])!;
+	let outstr = memio::string(&out)!;
+
+	assert(outstr == `<a href="/images/favicon.jpg"><img src="/images/favicon.jpg" alt="A smiley face :)"></a>`);
 };

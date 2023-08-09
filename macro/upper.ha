@@ -8,6 +8,7 @@
 
 use ascii::{strupper};
 use io;
+use memio;
 use regex::{compile};
 use strings::{toutf8};
 
@@ -30,4 +31,14 @@ export fn upper(h: io::handle, args: []str) (size | io::error) = {
 	let written = io::write(h, toutf8(s))?;
 	free(s);
 	return written;
+};
+
+@test fn upper() void = {
+	let out = memio::dynamic();
+	defer io::close(&out): void;
+
+	upper(&out, ["lowercase text AND SOME UPPERCASE and 123 numbers"])!;
+	let outstr = memio::string(&out)!;
+
+	assert(outstr == "LOWERCASE TEXT AND SOME UPPERCASE AND 123 NUMBERS");
 };
