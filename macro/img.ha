@@ -16,7 +16,7 @@ def IMG_RE = `img!\([[:space:]]*"(.*)"[[:space:]]*,[[:space:]]*"(.*)"[[:space:]]
 	append(macros, macro {
 		info = (
 			`img!("src", "alt")`,
-			"Converts the provided src and alt-text into an <img> that is surrounded by a clickable link to itself (HTML).",
+			`<a href="$src"><img src="$src alt="$alt"></a>`
 		),
 		regex = compile(IMG_RE)!,
 		formatter = &img,

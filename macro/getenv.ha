@@ -19,7 +19,7 @@ def GETENV_RE = `getenv!\([[:space:]]*([^)[:space:]]*)[[:space:]]*\)`;
 	append(macros, macro {
 		info = (
 			`getenv!(...)`,
-			"Looks up an environment variable and replaces macro with its value, if it exists -- otherwise replaces with the empty string.",
+			`Replaces macro with environment variable value, or "" if unset`,
 		),
 		regex = compile(GETENV_RE)!,
 		formatter = &getenv,
