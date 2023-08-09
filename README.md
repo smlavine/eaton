@@ -66,3 +66,11 @@ variables) from the input of a macro itself; this would increase
 implementation complexity considerably. However, the provided macros
 `getenv!` and `system!` are enough to interact with the environment
 and state can be stored and retrieved from it however you like.
+
+## Contributing and Copyright
+
+`Copyright (C) 2023 Sebastian LaVine <mail@smlavine.com>`
+
+Licensed under the terms of the [GNU GPL, version 3 or later](https://spdx.org/licenses/GPL-3.0-or-later.html).
+
+Patches? Feedback? Send them to [~smlavine/public-inbox@lists.sr.ht](https://lists.sr.ht/~smlavine/public-inbox).
