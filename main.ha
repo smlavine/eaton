@@ -65,31 +65,47 @@ fn run(c: *config) (io::error | void) = {
 	};
 };
 
+// Why? In macros() we only need to copy a (smaller) *macro::macro than a
+// macro::macro. But for that, sort::rbisect requires a **macro::macro.
+// So this is a helper function to compare **macro::macro which then calls
+// macro::compare.
+fn macro_ptr_compare(a: const *void, b: const *void) int = {
+	return macro::compare(*(a: **macro::macro), *(b: **macro::macro));
+};
+
 // Lists all macros present.
-fn macros() void = {
-	let synopsis_mods = fmt::modifiers {
+fn macros(h: io::handle) (io::error | void) = {
+	let synopsis_mods = &fmt::modifiers {
 		padding = fmt::padding::ALIGN_LEFT,
 		width = 0, // To be updated to length of longest element
 		...
 	};
 
 	let alphabetized_info: []*macro::macro = [];
+	defer free(alphabetized_info);
 
 	for (let i = 0z; i < len(macro::macros); i += 1) {
+		let macro_ptr: *macro::macro = &macro::macros[i];
 		let n = sort::rbisect(
-			alphabetized_info: []void,
+			alphabetized_info,
 			size(*macro::macro),
-			&macro::macros[i]: *void,
-			&macro::compare,
+			&macro_ptr,
+			&macro_ptr_compare,
 		);
-		insert(alphabetized_info[n], &macro::macros[i]);
+
+		insert(alphabetized_info[n], macro_ptr);
+		if (synopsis_mods.width < len(alphabetized_info[n].info.0)) {
+			synopsis_mods.width =
+				len(alphabetized_info[n].info.0): uint;
+		};
 	};
 
 	for (let i = 0z; i < len(alphabetized_info); i += 1) {
 		let (synopsis, description) = alphabetized_info[i].info;
-		// TODO: format so that synopises are left aligned, see
-		// synopsis_mods
-		fmt::printfln("{} - {}", synopsis, description)!;
+		log::printfln("{%}  {}", synopsis, synopsis_mods, description);
+		fmt::fprintfln(h, "{%}  {}",
+			synopsis, synopsis_mods, description,
+		)?;
 	};
 };
 
@@ -136,7 +152,7 @@ export fn main() void = {
 		case 'l' =>
 			c.line_by_line = true;
 		case 'm' =>
-			macros();
+			macros(c.out)!;
 			os::exit(os::status::SUCCESS);
 		case 'z' =>
 			log::setlogger(log::default);

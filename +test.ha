@@ -2,6 +2,7 @@
 // Copyright (C) 2023 Sebastian LaVine <mail@smlavine.com>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+use bufio;
 use io;
 use memio;
 use os;
@@ -307,4 +308,23 @@ let default_quotes: [2]quote = [
 	let outstr = memio::string(c.out as *io::stream: *memio::stream)!;
 
 	assert(outstr ==  "Text and MORE TEXT");
+};
+
+@test fn macros_list_is_sorted() void = {
+	let out = memio::dynamic();
+	defer io::close(&out): void;
+	macros(&out)!;
+
+	let all = strings::fromutf8(io::drain(&out)!)!;
+	defer free(all);
+
+	for (true) {
+		let a = bufio::scanline(&out)!;
+		let b = bufio::scanline(&out)!;
+		if (a is io::EOF || b is io::EOF) break;
+		defer { free(a as []u8); free(b as []u8); };
+		let a = strings::fromutf8(a as []u8)!;
+		let b = strings::fromutf8(b as []u8)!;
+		assert(strings::compare(a, b) < 0);
+	};
 };
