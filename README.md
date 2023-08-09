@@ -56,7 +56,7 @@ for formatting. Instead of capturing `.*`, we capture `[^)]*`,
 preventing the expression from matching beyond what is intended.
 
 For more information on regular expressions, consider reading [the
-documentation for the Hare regex module](https:/docs.harelang.org/regex)
+documentation for the Hare regex module](https://docs.harelang.org/regex)
 or [regex(7)](https://linux.die.net/man/7/regex).
 
 ### Modifying state
