@@ -58,7 +58,7 @@ export fn concat(h: io::handle, args: []str) (size | io::error) = {
 	assert(outstr == "");
 };
 
-@test fn concat_normal() void = {
+@test fn concat() void = {
 	let out = memio::dynamic();
 	defer io::close(&out): void;
 
