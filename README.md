@@ -3,6 +3,9 @@
 A pretty decent macro processor in less than 300 lines of
 [Hare](https://harelang.org).
 
+This is still a work in progress, and there are some bugs and features
+still being worked on; in particular, nested macros.
+
 ## Example usage
 
 ```shell-session
@@ -16,13 +19,13 @@ Hi there, EVERYONE!
 
 ## Installation
 
-eaton is designed to be easily vendored and extended, not installed like
-most other programs. Simply clone this repository where you wish, run
-`make`, and you're ready to go. If you are incorporating eaton into an
-existing repository, you may prefer to use `git-subtree`:
+eaton is meant to vendored and extended, not installed like most other
+programs. Simply clone this repository where you wish, run `make`, and
+you're ready to go. If you are incorporating eaton into an existing
+repository, you may prefer to use `git-subtree`:
 
 ```shell-session
-$ git subtree --squash -P eaton/ add https://git.sr.ht/~smlavine/eaton 1.0.0
+$ git subtree --squash -P eaton/ add https://git.sr.ht/~smlavine/eaton master
 ```
 
 ## Writing your own macros
