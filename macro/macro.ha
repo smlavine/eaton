@@ -56,7 +56,7 @@ export fn process(h: io::handle, buf: const []u8) (size | io::error) = {
 
 		// From the beginning of the buffer to the start of the regex
 		// match is regular text that should not be processed.
-		written += io::write(h, buf[..result[0].start_bytesize])?;
+		written += io::writeall(h, buf[..result[0].start_bytesize])?;
 
 
 		let macro_args: []str = alloc([], len(result) - 1);
@@ -92,7 +92,7 @@ export fn process(h: io::handle, buf: const []u8) (size | io::error) = {
 
 	// Anything remaining in buf was after the last macro (if there were
 	// any at all).
-	written += io::write(h, buf)?;
+	written += io::writeall(h, buf)?;
 
 	return written;
 };

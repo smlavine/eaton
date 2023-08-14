@@ -31,7 +31,7 @@ export fn getenv(h: io::handle, args: []str) (size | io::error) = {
 	// TODO: default value, like in tryenv. Can variable amount of
 	// capture groups be used?
 	assert(len(args) == 1);
-	return io::write(h, strings::toutf8(os::tryenv(args[0], "")));
+	return io::writeall(h, strings::toutf8(os::tryenv(args[0], "")));
 };
 
 @test fn getenv() void = {

@@ -28,7 +28,7 @@ def UPPER_RE = `upper!\(([^)]*)\)`;
 export fn upper(h: io::handle, args: []str) (size | io::error) = {
 	assert(len(args) == 1);
 	let s = strupper(args[0]);
-	let written = io::write(h, toutf8(s))?;
+	let written = io::writeall(h, toutf8(s))?;
 	free(s);
 	return written;
 };

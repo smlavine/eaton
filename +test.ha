@@ -13,7 +13,7 @@ use macro;
 let default_quotes: [2]quote = [
 	quote {
 		text = ['`', '`'],
-		writer = &io::write,
+		writer = &io::writeall,
 	},
 	quote {
 		text = ['\'', '\''],
@@ -133,7 +133,7 @@ let default_quotes: [2]quote = [
 		quotes = [
 			quote {
 				text = strings::toutf8("<quote>"),
-				writer = &io::write,
+				writer = &io::writeall,
 			}, 
 			quote {
 				text = strings::toutf8("</quote>"),
@@ -172,7 +172,7 @@ let default_quotes: [2]quote = [
 		quotes = [
 			quote {
 				text = strings::toutf8("<quote>"),
-				writer = &io::write,
+				writer = &io::writeall,
 			}, 
 			quote {
 				text = strings::toutf8("</quote>"),
@@ -196,7 +196,7 @@ let default_quotes: [2]quote = [
 		quotes = [
 			quote {
 				text = strings::toutf8("<quote>"),
-				writer = &io::write,
+				writer = &io::writeall,
 			}, 
 			quote {
 				text = strings::toutf8("</quote>"),
@@ -220,7 +220,7 @@ let default_quotes: [2]quote = [
 		quotes = [
 			quote {
 				text = strings::toutf8("<quote>"),
-				writer = &io::write,
+				writer = &io::writeall,
 			}, 
 			quote {
 				text = strings::toutf8("</quote>"),
@@ -244,7 +244,7 @@ let default_quotes: [2]quote = [
 		quotes = [
 			quote {
 				text = strings::toutf8("<quote>"),
-				writer = &io::write,
+				writer = &io::writeall,
 			}, 
 			quote {
 				text = strings::toutf8("</quote>"),
@@ -268,7 +268,7 @@ let default_quotes: [2]quote = [
 		quotes = [
 			quote {
 				text = strings::toutf8("<quote>"),
-				writer = &io::write,
+				writer = &io::writeall,
 			}, 
 			quote {
 				text = strings::toutf8("</quote>"),
@@ -292,7 +292,7 @@ let default_quotes: [2]quote = [
 		quotes = [
 			quote {
 				text = strings::toutf8(`"`),
-				writer = &io::write,
+				writer = &io::writeall,
 			}, 
 			quote {
 				text = strings::toutf8(`"`),

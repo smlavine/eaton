@@ -33,7 +33,7 @@ export fn concat(h: io::handle, args: []str) (size | io::error) = {
 		};
 	};
 
-	let result = io::write(h, buf);
+	let result = io::writeall(h, buf);
 	return result;
 };
 

@@ -131,7 +131,7 @@ export fn main() void = {
 		quotes = [
 			quote {
 				text = toutf8("``"),
-				writer = &io::write,
+				writer = &io::writeall,
 			},
 			quote {
 				text = toutf8("''"),
