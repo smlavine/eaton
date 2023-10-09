@@ -319,8 +319,8 @@ let default_quotes: [2]quote = [
 	defer free(all);
 
 	for (true) {
-		let a = bufio::scanline(&out)!;
-		let b = bufio::scanline(&out)!;
+		let a = bufio::read_line(&out)!;
+		let b = bufio::read_line(&out)!;
 		if (a is io::EOF || b is io::EOF) break;
 		defer { free(a as []u8); free(b as []u8); };
 		let a = strings::fromutf8(a as []u8)!;

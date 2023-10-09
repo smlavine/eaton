@@ -32,7 +32,7 @@ export let macros: []macro = [];
 };
 
 // Compares two macros alphabetically by their synopsis.
-export fn compare(a: const *void, b: const *void) int = {
+export fn compare(a: const *opaque, b: const *opaque) int = {
 	let a: *macro = (a: *macro), b: *macro = (b: *macro);
 	return strings::compare(a.info.0, b.info.0);
 };

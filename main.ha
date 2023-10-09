@@ -48,7 +48,7 @@ fn run(c: *config) (io::error | void) = {
 	switch (c.line_by_line) {
 	case true =>
 		for (true) {
-			match (bufio::scanline(c.in)?) {
+			match (bufio::read_line(c.in)?) {
 			case let sl: []u8 =>
 				defer free(sl);
 				append(sl, '\n'); // scanline ignores newline
@@ -69,7 +69,7 @@ fn run(c: *config) (io::error | void) = {
 // macro::macro. But for that, sort::rbisect requires a **macro::macro.
 // So this is a helper function to compare **macro::macro which then calls
 // macro::compare.
-fn macro_ptr_compare(a: const *void, b: const *void) int = {
+fn macro_ptr_compare(a: const *opaque, b: const *opaque) int = {
 	return macro::compare(*(a: **macro::macro), *(b: **macro::macro));
 };
 
@@ -156,6 +156,8 @@ export fn main() void = {
 			os::exit(os::status::SUCCESS);
 		case 'z' =>
 			log::setlogger(log::default);
+		case =>
+			abort("unreachable");
 		};
 	};
 
