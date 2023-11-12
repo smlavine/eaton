@@ -75,7 +75,7 @@ fn macro_ptr_compare(a: const *opaque, b: const *opaque) int = {
 
 // Lists all macros present.
 fn macros(h: io::handle) (io::error | void) = {
-	let synopsis_mods = &fmt::modifiers {
+	let synopsis_mods = fmt::modifiers {
 		padding = fmt::padding::ALIGN_LEFT,
 		width = 0, // To be updated to length of longest element
 		...
@@ -102,9 +102,9 @@ fn macros(h: io::handle) (io::error | void) = {
 
 	for (let i = 0z; i < len(alphabetized_info); i += 1) {
 		let (synopsis, description) = alphabetized_info[i].info;
-		log::printfln("{%}  {}", synopsis, synopsis_mods, description);
+		log::printfln("{%}  {}", synopsis, &synopsis_mods, description);
 		fmt::fprintfln(h, "{%}  {}",
-			synopsis, synopsis_mods, description,
+			synopsis, &synopsis_mods, description,
 		)?;
 	};
 };
