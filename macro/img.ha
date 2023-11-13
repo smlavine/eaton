@@ -16,7 +16,7 @@ def IMG_RE = `img!\([[:space:]]*"(.*)"[[:space:]]*,[[:space:]]*"(.*)"[[:space:]]
 	append(macros, macro {
 		info = (
 			`img!("src", "alt")`,
-			`<a href="$src"><img src="$src alt="$alt"></a>`
+			`<a href="$src"><img src="$src" alt="$alt"></a>`
 		),
 		regex = compile(IMG_RE)!,
 		formatter = &img,
