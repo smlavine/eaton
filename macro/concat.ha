@@ -10,16 +10,17 @@ use memio;
 use regex::{compile};
 use strings;
 
-def CONCAT_RE = `concat!\(([^)]*)\)`;
+def CONCAT_RE = "<[ \t]*concat![ \t]+\"(.*)\"[ \t]*/[ \t]*>";
 
 @init fn append_macro() void = {
 	append(macros, macro {
-		info = (`concat!(...)`, "Removes all whitespace"),
+		info = (`<concat! "..." />`, "Removes all whitespace"),
 		regex = compile(CONCAT_RE)!,
 		formatter = &concat,
 	});
 };
 
+// XXX slice[n..m] instead of reallocating a buffer and deleting
 export fn concat(h: io::handle, args: []str) (size | io::error) = {
 	assert(len(args) == 1);
 
@@ -50,7 +51,6 @@ export fn concat(h: io::handle, args: []str) (size | io::error) = {
 @test fn concat_all_whitespace() void = {
 	let out = memio::dynamic();
 	defer io::close(&out): void;
-
 
 	concat(&out, ["\f\n\r\t\v "])!;
 	let outstr = memio::string(&out)!;

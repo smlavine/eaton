@@ -12,12 +12,12 @@ use memio;
 use regex::{compile};
 use strings::{toutf8};
 
-def UPPER_RE = `upper!\(([^)]*)\)`;
+def UPPER_RE = "<[ \t]*upper![ \t]+\"(.*)\"[ \t]*/[ \t]*>";
 
 @init fn append_macro() void = {
 	append(macros, macro {
 		info = (
-			`upper!(...)`,
+			`<upper! "..." />`,
 			"Converts all lowercase characters to uppercase",
 		),
 		regex = compile(UPPER_RE)!,

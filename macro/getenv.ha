@@ -11,17 +11,11 @@ use os;
 use regex::{compile};
 use strings;
 
-// TODO: provided default value; doesn't work
-//def GETENV_RE = `getenv!\([[:space:]]*([^),]*)(,[[:space:]]*"[^"]*")?[[:space:]]*\)`;
-
-def GETENV_RE = `getenv!\([[:space:]]*([^)[:space:]]*)[[:space:]]*\)`;
+def GETENV_RE = "<[ \t]*getenv![ \t]+\"(.*)\"[ \t]*/[ \t]*>";
 
 @init fn append_macro() void = {
 	append(macros, macro {
-		info = (
-			`getenv!(...)`,
-			`Replaces macro with environment variable value, or "" if unset`,
-		),
+		info = (`<getenv! "..." />`, `Replaces macro with env. var.`),
 		regex = compile(GETENV_RE)!,
 		formatter = &getenv,
 	});

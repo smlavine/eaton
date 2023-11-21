@@ -19,7 +19,7 @@ use strings::{toutf8};
 };
 
 @test fn one_simple_macro() void = {
-	const input = "upper!(text)";
+	const input = `<upper! "text"/>`;
 	let out = memio::dynamic();
 	defer io::close(&out): void;
 
@@ -31,7 +31,7 @@ use strings::{toutf8};
 };
 
 @test fn regular_text_and_macro() void = {
-	const input = "Hi there, upper!(everyone)!";
+	const input = `Hi there, <upper! "everyone" />!";
 	let out = memio::dynamic();
 	defer io::close(&out): void;
 
@@ -43,7 +43,7 @@ use strings::{toutf8};
 };
 
 @test fn multiple_macros() void = {
-	const input = "My name is upper!(eaton) and I live at concat!(123 Apple Street).";
+	const input = `My name is <upper! "eaton"/> and I live at <concat! "123 Apple Street"/>.`;
 	let out = memio::dynamic();
 	defer io::close(&out): void;
 
@@ -55,7 +55,7 @@ use strings::{toutf8};
 };
 
 @test fn nested_macros() void = {
-	const input = "upper!(concat!(a b))";
+	const input = `<upper! "<concat! "a b"/>" />"`;
 	let out = memio::dynamic();
 	defer io::close(&out): void;
 

@@ -10,13 +10,13 @@ use io;
 use memio;
 use regex::{compile};
 
-def IMG_RE = `img!\([[:space:]]*"(.*)"[[:space:]]*,[[:space:]]*"(.*)"[[:space:]]*\)`;
+def IMG_RE = "<[ \t]*img![ \t]+\"(.*)\"[ \t]*,[ \t]*\"(.*)\"[ \t]*/[ \t]*>";
 
 @init fn append_macro() void = {
 	append(macros, macro {
 		info = (
-			`img!("src", "alt")`,
-			`<a href="$src"><img src="$src" alt="$alt"></a>`
+			`<img! "src", "alt"/>`,
+			`<a href="$src"><img src="$src" alt="$alt"></a>`,
 		),
 		regex = compile(IMG_RE)!,
 		formatter = &img,
