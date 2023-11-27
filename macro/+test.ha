@@ -31,7 +31,7 @@ use strings::{toutf8};
 };
 
 @test fn regular_text_and_macro() void = {
-	const input = `Hi there, <upper! "everyone" />!";
+	const input = `Hi there, <upper! "everyone" />!`;
 	let out = memio::dynamic();
 	defer io::close(&out): void;
 
