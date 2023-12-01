@@ -76,7 +76,7 @@ fn macro_ptr_compare(a: const *opaque, b: const *opaque) int = {
 // Lists all macros present.
 fn macros(h: io::handle) (io::error | void) = {
 	let synopsis_mods = fmt::mods {
-		padding = fmt::padding::ALIGN_LEFT,
+		alignment = fmt::alignment::LEFT,
 		width = 0, // To be updated to length of longest element
 		...
 	};
